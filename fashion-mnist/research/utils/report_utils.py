@@ -2,7 +2,7 @@ import os
 import sys
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
-sys.path.append(os.getcwd() + '/..')
+sys.path.append(os.getcwd() + '/../..')
 sys.dont_write_bytecode = True
 
 from pypnet import pypnet

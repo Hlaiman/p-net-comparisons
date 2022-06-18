@@ -1,11 +1,11 @@
 import os
 import sys
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+os.environ['CUDA_VISIBLE_DEVICES']='-1'
 
 sys.dont_write_bytecode = True
 
 sys.path.append(os.getcwd() + '/..')
-from pypnet import pypnet
 
 import tensorflow as tf
 import numpy as np

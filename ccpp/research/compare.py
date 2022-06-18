@@ -2,8 +2,9 @@ import os
 import sys
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+os.environ['CUDA_VISIBLE_DEVICES']='-1'
 
-sys.path.append(os.getcwd() + '/..')
+sys.path.append(os.getcwd() + '/../..')
 sys.dont_write_bytecode = True
 
 from pypnet import pypnet
@@ -60,7 +61,7 @@ print("\n===== Accuracy:")
 print("\nKERAS accuracy is {}".format(round(keras_accuracy, 4)))
 print("P-NET accuracy is {}".format(round(pnet_accuracy, 4)))
 
-print("\nP-NET is {} times more accurate than KERAS".format(round(pnet_accuracy / keras_accuracy, 2)))
+#print("\nP-NET is {} times more accurate than KERAS".format(round(pnet_accuracy / keras_accuracy, 2)))
 
 print("\n===== Training time:")
 print("\nKERAS training time: %s ms" % keras_training_time)

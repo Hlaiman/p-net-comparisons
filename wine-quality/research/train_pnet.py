@@ -3,11 +3,10 @@ import sys
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
 sys.dont_write_bytecode = True
-sys.path.append(os.getcwd() + '/..')
+sys.path.append(os.getcwd() + '/../..')
 
 from pypnet import pypnet
 
-from tensorflow import keras
 from config import classes_num, pnet_epochs, batch_size, model_path, train_data_path
 import time
 import json
