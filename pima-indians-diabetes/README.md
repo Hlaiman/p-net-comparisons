@@ -2,8 +2,6 @@
 
 ## Dataset - [Pima Indians Diabetes](https://www.kaggle.com/uciml/pima-indians-diabetes-database)
 
-- Download dataset and put into **research/data/** folder.
-
 ## Executable scripts (.bat)
 
 ### 1. train_keras.bat

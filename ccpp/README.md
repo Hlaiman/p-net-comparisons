@@ -2,8 +2,6 @@
 
 ## Dataset - [Combined Cycle Power Plant Data Set](https://archive.ics.uci.edu/ml/datasets/combined+cycle+power+plant)
 
-- Download dataset and put into **research/data/** folder.
-
 ## Executable scripts (.bat)
 
 ### 1. train_keras.bat

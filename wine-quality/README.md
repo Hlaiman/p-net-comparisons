@@ -2,8 +2,6 @@
 
 ## Dataset - [Wine Quality](https://archive.ics.uci.edu/ml/datasets/Wine+Quality)
 
-- Download dataset and put into **research/data/** folder.
-
 ## Executable scripts (.bat)
 
 ### 1. train_keras.bat

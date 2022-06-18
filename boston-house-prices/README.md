@@ -2,8 +2,6 @@
 
 ## Dataset - [Boston house prices](https://www.kaggle.com/vikrishnan/boston-house-prices)
 
-- Download dataset and put into **research/data/** folder.
-
 ## Executable scripts (.bat)
 
 ### 1. train_keras.bat

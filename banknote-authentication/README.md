@@ -2,8 +2,6 @@
 
 ## Dataset - [Banknote authentication](https://archive.ics.uci.edu/ml/datasets/banknote+authentication)
 
-- Download dataset and put into **research/data/** folder.
-
 ## Executable scripts (.bat)
 
 ### 1. train_keras.bat

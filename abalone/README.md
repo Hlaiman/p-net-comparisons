@@ -2,8 +2,6 @@
 
 ## Dataset - [Abalone Data Set](https://archive.ics.uci.edu/ml/datasets/abalone)
 
-- Download dataset and put into **research/data/** folder.
-
 ## Executable scripts (.bat)
 
 ### 1. train_keras.bat
