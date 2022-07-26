@@ -28,9 +28,9 @@ pnet = pypnet.new(
 	inputs=inputs_num,
 	epoch=pnet_epochs,
 	outputs=1,
-	autointervals=True,
-	#intervals=10,
-	density=1,
+#	autointervals=True,
+	intervals=0,
+#	density=0,
 )
 
 pypnet.load(pnet, train_data_path)

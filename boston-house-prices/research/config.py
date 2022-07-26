@@ -10,9 +10,9 @@ model_path = "models"
 
 batch_size = 1
 
-range = 2.25
+range = 5
 
-keras_epochs = 50
-pnet_epochs = 500
+keras_epochs = 2
+pnet_epochs = 2
 
 	

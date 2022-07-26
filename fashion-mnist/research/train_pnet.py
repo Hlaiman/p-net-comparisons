@@ -31,7 +31,7 @@ pnet = pypnet.new(
 	epoch=pnet_epochs,
 	outputs=classes_num,
 	intervals=12,
-	autointervals=True,
+	autointervals=True
 )
 
 pypnet.load(pnet, 'train_data.csv')

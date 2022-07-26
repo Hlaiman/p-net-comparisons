@@ -1,0 +1,73 @@
+Библиотека функций П-сети для интерпретатора Python pypnet.pyd
+
+# загрузка(подключение) библиотеки
+import pypnet
+
+# создание объекта  П-сети(pnet) с именованными параметрами, все параметры опциональные
+pnet = pypnet.new(layers=(к-во слоев), inputs=(к-во входов), outputs=(к-во выходов),
+intervals=(к-во интервалов), density=(плотность), epoch=(к-во эпох обучения), trees
+patterns=(к-во паттернов), autointervals=(автоматически), interpolate=(интерполяция),
+pnetfile=(загрузить сеть из файла), datafile=(загрузить данные обучения из файла));
+
+# загрузка из файла(file_name) конфигурации и весов П-сети(pnet) если расширение:
+.nnw - текстовый формат
+.nnb - двоичный формат
+или данных для обучения:
+.csv - паттерны в текстовом формате
+.nnp - паттерны в двоичном формате
+pypnet.load(pnet, file_name)
+
+# добавить один паттерн в тренировочный набор П-сети(pnet), массивы вход(inp) выход(out)
+pypnet.addxy(pnet, inp, out)
+
+# обучение П-сети(pnet)
+pypnet.train(pnet)
+
+# обучение/дообучение П-сети(pnet) использует один паттерн массивы вход(inp) выход(out)
+pypnet.fit(pnet, inp, out)
+
+# сохранение в файл(file_name) П-сети(pnet) весов  *.nnw, *.nnb или паттернов *.csv *.nnp
+pypnet.save(pnet, file_name)
+
+# сохранение в файл(file_name) П-сети(pnet) по расширению исходный код *.js *.cpp *.pas *.py
+pypnet.source(pnet, file_name)
+
+# рассчитать массив выходов(results) П-сети(pnet) по заданному массиву входов(inputs)
+results = pypnet.compute(pnet, inputs)
+
+# прочитать значения параметров, свойств П-сети(pnet) по имени(prop_name - строка)
+property = pypnet.get(pnet, prop_name) # имя см. выше или другое имя свойств
+# так-же можно прочитать списки 'weights' 'signals' 'coeffis' 'ratings' и т. д.
+# можно прочитать свойства объекта нейросети в экспортном формате 'json'
+# можно прочитать полный список сериализованного образа обученной сети 'pnet'
+
+# записать значения(value) параметров, свойств П-сети(pnet) по имени(prop_name - строка)
+pypnet.set(pnet, prop_name, value) # имя см. выше или другое имя свойств
+# так-же можно записать списки 'weights' 'signals' 'coeffis' 'ratings' и т. д.
+# можно записать свойства объекта нейросети из экспортного формата 'json'
+# можно записать полный список сериализованного образа обученной сети 'pnet'
+
+# пример создания, добавления набора паттернов, обучения и тестирования П-сети
+import pypnet
+pnet = pypnet.new(inputs=2, outputs=1, intervals=0);
+if pnet >= 0:
+  for i in range(20): pypnet.addxy(pnet, [i,i], [i+i])
+  print(pypnet.train(pnet))
+  for i in range(20):
+    for j in range(20):
+      print('Compute {}+{}={}'.format(i,j,pypnet.compute(pnet, [i,j]))) 
+
+# пример на использование get\set для клонирования П-сети из существующей pnet
+if pnet > 0:
+  pnet_clone = pypnet.new()
+  if pnet_clone > 0:
+    pypnet.set(pnet_clone, 'pnet', pypnet.get(pnet, 'pnet'))
+
+# пример на использование get\set для обнуления половины массива весов П-сети
+wc = pypnet.get(pnet, 'inputs') * pypnet.get(pnet, 'intervals') # расчет количество весов
+if(wc > 0):
+  lst = pypnet.get(pnet, 'weights')  # получаем в lst список весов
+  for i in range(round(wc / 2)): # цикл по первой половине списка
+    lst[i] = 0.0
+  if(pypnet.set(pnet, 'weights', lst)): # если список весов установлен
+    print(pypnet.get(pnet, 'weights'))  # распечатать список

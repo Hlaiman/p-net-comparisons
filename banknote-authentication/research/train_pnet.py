@@ -28,8 +28,8 @@ pnet = pypnet.new(
 	inputs=inputs_num,
 	epoch=pnet_epochs,
 	outputs=classes_num,
-	intervals=30,
-	density=2,
+	intervals=0,
+	density=3,
 	#autointervals=True,
 )
 
