@@ -12,3 +12,5 @@
 ## Dataset - [Pima Indians Diabetes](https://www.kaggle.com/uciml/pima-indians-diabetes-database)
 ## Dataset - [Pima Indians Diabetes](https://www.kaggle.com/uciml/pima-indians-diabetes-database)
 ## Dataset - [Wine Quality](https://archive.ics.uci.edu/ml/datasets/Wine+Quality)
+
+## Comparisons results: https://omega-server.ai/science/tests/
