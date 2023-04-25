@@ -1,39 +1,93 @@
-Библиотека функций П-сети для интерпретатора Python pypnet.pyd
-
+  Библиотека функций П-сети для интерпретатора Python pypnet.pyd
+реализация под Windows существует в формате x32 и x64 и поддерживает
+работу в весиях Python от 2.3 до 2.7 и от 3.0 до 3.10, включительно.
+  
 # загрузка(подключение) библиотеки
 import pypnet
 
 # создание объекта  П-сети(pnet) с именованными параметрами, все параметры опциональные
-pnet = pypnet.new(layers=(к-во слоев), inputs=(к-во входов), outputs=(к-во выходов),
-intervals=(к-во интервалов), density=(плотность), epoch=(к-во эпох обучения), trees
-patterns=(к-во паттернов), autointervals=(автоматически), interpolate=(интерполяция),
-pnetfile=(загрузить сеть из файла), datafile=(загрузить данные обучения из файла));
+pnet = pypnet.new( layers=(к-во слоев), inputs=(к-во входов), outputs=(к-во выходов),
+neurons=(нейронов), intervals=(к-во интервалов), density=(плотность), epoch=(к-во эпох),
+patterns=(к-во паттернов), autointervals=(автоинтервал), interpolate=(интерполировать),
+percent=(процент паттернов), mixpatterns=(микс), classes=(классов), ensemble=(ансамбль),
+mode=(режим) значение параметра задается в виде строки с перечнем наименований режимов:
+none - зарезервированное, неопределенное значение;
+layers - предопределено использование нейросетевых слоев;
+fields - предопределено использование нейросетевых полей;
+trees - предопределено использование вычислительных деревьев;
+ensemble - предопределено использование вычислительных ансамблей (комитетов);
+parallelCPU - оптимизация посредством использования парралельных вычислений (на CPU);
+parallelGPU - оптимизация посредством использования парралельных вычислений (на GPU),
+pnetfile=(загрузить сеть из файла), datafile=(загрузить данные обучения из файла) )
 
-# загрузка из файла(file_name) конфигурации и весов П-сети(pnet) если расширение:
-.nnw - текстовый формат
-.nnb - двоичный формат
-или данных для обучения:
-.csv - паттерны в текстовом формате
-.nnp - паттерны в двоичном формате
+# чтение из файла(file_name) данных конфигурации и весов П-сети(pnet) по расширению:
+.nnw - образ сети в текстовом формате;
+.nnb - образ сети в двоичном формате;
+.pak - двоичный упакованный образ сети;
+или данных наборов для обучения - датасетов (независимых переменных, входов и выходов):
+.csv - паттерны в текстовом формате;
+.nnp - паттерны в двоичном формате.
 pypnet.load(pnet, file_name)
 
-# добавить один паттерн в тренировочный набор П-сети(pnet), массивы вход(inp) выход(out)
+# добавить в тренировочный набор паттернов П-сети(pnet), массивы входов(inp) выходов(out)
 pypnet.addxy(pnet, inp, out)
 
-# обучение П-сети(pnet)
+# обучение П-сети(pnet) на тренировочном наборе паттернов полученных из datafile или addxy
+# можно указать дополнительный параметр - имя каталога для файлов с тестами сети по эпохам
 pypnet.train(pnet)
 
-# обучение/дообучение П-сети(pnet) использует один паттерн массивы вход(inp) выход(out)
+# прогнозирование массива выходов(results) П-сети(pnet) по заданному массиву входов(inputs)
+results = pypnet.compute(pnet, inputs)
+
+# пример кода для создания П-сети, цикла добавления паттернов, обучения и цикла тестирования
+import pypnet
+pnet = pypnet.new(inputs=2, outputs=1, intervals=0);
+if(pnet>=0):
+  for i in range(20): pypnet.addxy(pnet, [i,i], [i+i])
+  print(pypnet.train(pnet))
+  for i in range(20):
+    for j in range(20):
+      print('Compute {}+{}={}'.format(i,j,pypnet.compute(pnet, [i,j])))
+  del pnet
+
+# обучение/дообучение П-сети(pnet) применяя передаваемые массивы входов(inp) выходов(out)
 pypnet.fit(pnet, inp, out)
 
-# сохранение в файл(file_name) П-сети(pnet) весов  *.nnw, *.nnb или паттернов *.csv *.nnp
+# массивы аргументов для функцмй должны быть представлены в формате list или numpy.array
+# пример создания тренировочного и тестового датасетов, обучения и проверки работы П-сети
+import numpy as np
+import pypnet as pn
+
+x_train = np.random.rand(1000, 10)
+y_train = x_train.mean(axis=1).reshape(1000, 1)
+x_test = np.random.rand(100, 10)
+y_test = x_test.mean(axis=1).reshape(100, 1)
+
+pnet= pn.new(inputs=x_train.shape[1], outputs=y_train.shape[1], epoch=1)
+if(pnet>=0):
+  print(pn.fit(pnet, x_train, y_train))
+  print('compute train', pn.compute(pnet, x_train, y_train, 'accuracy'))
+  print('compute test', pn.compute(pnet, x_test, y_test, 'accuracy'))
+  del pnet
+
+# тест П-сети(pnet) по заданному файлом(file_name) датасету входов выходов в формате *.csv
+message = pypnet.test(pnet, file_name)
+# пример создания и загрузки тренировочного и тестового датасетов из файлов и теста П-сети
+import pypnet as pn
+
+pnet= pn.new(datafile='train.csv')
+if(pnet>=0):
+  print(pn.train(pnet))
+  print(pn.test(pnet, 'train.csv'))
+  print(pn.test(pnet, 'test.csv'))
+  del pnet
+
+# сохранение в файл(file_name) образ П-сети(pnet) *.nnw, *.nnb *.pak или паттерны *.csv *.nnp
 pypnet.save(pnet, file_name)
+# данные записываются в текстовом формате *.nnw *.csv в бинарном *.nnb *.nnp пакованном *.pak
 
-# сохранение в файл(file_name) П-сети(pnet) по расширению исходный код *.js *.cpp *.pas *.py
+# сохранение в файл(file_name) исполнимого, исходного кода П-сети(pnet) *.js *.cpp *.pas *.py
 pypnet.source(pnet, file_name)
-
-# рассчитать массив выходов(results) П-сети(pnet) по заданному массиву входов(inputs)
-results = pypnet.compute(pnet, inputs)
 
 # прочитать значения параметров, свойств П-сети(pnet) по имени(prop_name - строка)
 property = pypnet.get(pnet, prop_name) # имя см. выше или другое имя свойств
@@ -46,16 +100,6 @@ pypnet.set(pnet, prop_name, value) # имя см. выше или другое имя свойств
 # так-же можно записать списки 'weights' 'signals' 'coeffis' 'ratings' и т. д.
 # можно записать свойства объекта нейросети из экспортного формата 'json'
 # можно записать полный список сериализованного образа обученной сети 'pnet'
-
-# пример создания, добавления набора паттернов, обучения и тестирования П-сети
-import pypnet
-pnet = pypnet.new(inputs=2, outputs=1, intervals=0);
-if pnet >= 0:
-  for i in range(20): pypnet.addxy(pnet, [i,i], [i+i])
-  print(pypnet.train(pnet))
-  for i in range(20):
-    for j in range(20):
-      print('Compute {}+{}={}'.format(i,j,pypnet.compute(pnet, [i,j]))) 
 
 # пример на использование get\set для клонирования П-сети из существующей pnet
 if pnet > 0:
